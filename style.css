@@ -1,0 +1,446 @@
+/* Reset & Core Setup */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  /* Common transitions */
+  --transition-speed: 0.25s;
+  --transition-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+  --accent-color: #3B82F6;
+  --accent-color-hover: #2563EB;
+}
+
+/* Light Theme Variables */
+body.light {
+  --bg-color: #E8ECEF;
+  --text-primary: #1A1A1A;
+  --text-secondary: #70757A;
+  --card-bg: linear-gradient(135deg, rgba(245, 247, 250, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%);
+  --card-border: rgba(255, 255, 255, 0.6);
+  --card-shadow: 0 20px 50px rgba(74, 127, 193, 0.2), 0 1px 3px rgba(0, 0, 0, 0.05);
+  
+  --btn-num-bg: #F0F2F5;
+  --btn-num-text: #1A1A1A;
+  --btn-num-hover: #E4E7EB;
+  
+  --btn-op-bg: #E8EBEF;
+  --btn-op-text: #1A1A1A;
+  --btn-op-hover: #DDE2E7;
+  
+  --btn-util-bg: #E8EBEF;
+  --btn-util-text: #8B8F98;
+  --btn-util-hover: #DDE2E7;
+  
+  --btn-sci-bg: rgba(232, 235, 239, 0.6);
+  --btn-sci-text: #606770;
+  --btn-sci-hover: rgba(221, 226, 231, 0.8);
+  
+  --toggle-btn-bg: rgba(255, 255, 255, 0.8);
+  --toggle-btn-border: rgba(0, 0, 0, 0.05);
+  --toggle-btn-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --toggle-icon-color: #4A5568;
+}
+
+/* Dark Theme Variables */
+body.dark {
+  --bg-color: #0A0B0E;
+  --text-primary: #FFFFFF;
+  --text-secondary: #8B8F98;
+  --card-bg: linear-gradient(135deg, rgba(21, 23, 28, 0.9) 0%, rgba(13, 14, 18, 0.95) 100%);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --card-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+  
+  --btn-num-bg: #23262E;
+  --btn-num-text: #FFFFFF;
+  --btn-num-hover: #2E323D;
+  
+  --btn-op-bg: #2C2F38;
+  --btn-op-text: #FFFFFF;
+  --btn-op-hover: #373B46;
+  
+  --btn-util-bg: #23262E;
+  --btn-util-text: #8B8F98;
+  --btn-util-hover: #2E323D;
+  
+  --btn-sci-bg: rgba(35, 38, 46, 0.6);
+  --btn-sci-text: #B2B6C1;
+  --btn-sci-hover: rgba(46, 50, 61, 0.8);
+  
+  --toggle-btn-bg: rgba(35, 38, 46, 0.8);
+  --toggle-btn-border: rgba(255, 255, 255, 0.05);
+  --toggle-btn-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --toggle-icon-color: #E2E8F0;
+}
+
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  transition: background-color var(--transition-speed) ease;
+}
+
+/* App Container and Background Glow */
+.app-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 40px 20px;
+}
+
+.ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.45) 0%, rgba(59, 130, 246, 0) 70%);
+  filter: blur(80px);
+  z-index: 1;
+  pointer-events: none;
+  transition: background var(--transition-speed) ease, transform 0.5s ease;
+}
+
+body.dark .ambient-glow {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.55) 0%, rgba(59, 130, 246, 0) 70%);
+}
+
+/* Calculator Card Styling */
+.calculator-card {
+  position: relative;
+  z-index: 2;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 32px;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 24px;
+  width: 340px;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+  transition: width var(--transition-speed) var(--transition-bezier),
+              background var(--transition-speed) ease,
+              border-color var(--transition-speed) ease,
+              box-shadow var(--transition-speed) ease;
+}
+
+.calculator-card.open {
+  width: 568px;
+}
+
+/* Display Area Styling */
+.display-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 140px;
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 4px;
+  text-align: right;
+  position: relative;
+}
+
+.mode-badge {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  background: rgba(59, 130, 246, 0.1);
+  padding: 2px 6px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+.expression-line {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  word-break: break-all;
+  max-height: 48px;
+  overflow-y: auto;
+  line-height: 1.3;
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.result-line {
+  font-size: 40px;
+  font-weight: 600;
+  color: var(--text-primary);
+  word-break: break-all;
+  line-height: 1.1;
+  width: 100%;
+}
+
+/* Card Body & Panel Layouts */
+.card-body {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Scientific Panel (Left Drawer) */
+.scientific-panel {
+  width: 0;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  transition: width var(--transition-speed) var(--transition-bezier),
+              opacity var(--transition-speed) var(--transition-bezier),
+              margin-right var(--transition-speed) var(--transition-bezier);
+  margin-right: 0;
+}
+
+.calculator-card.open .scientific-panel {
+  width: 216px;
+  opacity: 1;
+  visibility: visible;
+  margin-right: 12px;
+}
+
+.scientific-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  grid-template-rows: repeat(6, 64px);
+  gap: 12px;
+  width: 216px;
+}
+
+/* Main Button Grid */
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 64px);
+  grid-template-rows: repeat(6, 64px);
+  gap: 12px;
+  width: 292px;
+}
+
+/* Base Button Styling */
+.btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Focus States for Accessibility */
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent-color);
+}
+
+/* Tactile Active Animation */
+.btn:active {
+  transform: scale(0.92);
+  opacity: 0.85;
+}
+
+/* Button Subtypes */
+.number-btn {
+  background-color: var(--btn-num-bg);
+  color: var(--btn-num-text);
+}
+.number-btn:hover {
+  background-color: var(--btn-num-hover);
+}
+
+.operator-btn {
+  background-color: var(--btn-op-bg);
+  color: var(--btn-op-text);
+}
+.operator-btn:hover {
+  background-color: var(--btn-op-hover);
+}
+
+.utility-btn {
+  background-color: var(--btn-util-bg);
+  color: var(--btn-util-text);
+}
+.utility-btn:hover {
+  background-color: var(--btn-util-hover);
+}
+
+.scientific-btn {
+  background-color: var(--btn-sci-bg);
+  color: var(--btn-sci-text);
+  font-size: 18px;
+}
+.scientific-btn:hover {
+  background-color: var(--btn-sci-hover);
+}
+
+/* Active Operator Key Highlight */
+.operator-btn.active {
+  background-color: var(--accent-color) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Specific Equals Button pill */
+.equals-btn {
+  grid-column: 4;
+  grid-row: 5 / 7;
+  width: 64px;
+  height: 140px;
+  border-radius: 32px;
+  background-color: var(--accent-color);
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+.equals-btn:hover {
+  background-color: var(--accent-color-hover);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.45);
+}
+
+/* Deg/Rad Scientific Switch Label */
+.deg-rad-btn {
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  gap: 1px;
+  align-items: center;
+  justify-content: center;
+}
+.deg-rad-btn .slash {
+  opacity: 0.4;
+  font-weight: 400;
+}
+.deg-rad-btn span.active {
+  color: var(--accent-color);
+}
+
+/* Inline Deg/Rad toggle styling (top row of main grid) */
+.inline-deg-rad-btn {
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--toggle-btn-border);
+  background: var(--toggle-btn-bg);
+  box-shadow: var(--toggle-btn-shadow);
+  color: var(--toggle-icon-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color var(--transition-speed) ease,
+              color var(--transition-speed) ease,
+              border-color var(--transition-speed) ease;
+}
+
+.theme-toggle-btn:hover {
+  transform: rotate(45deg) scale(1.05);
+}
+
+.theme-toggle-btn svg {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  transition: transform 0.5s var(--transition-bezier), opacity 0.3s ease;
+}
+
+body.dark .sun-icon {
+  transform: scale(0) rotate(-90deg);
+  opacity: 0;
+}
+body.dark .moon-icon {
+  transform: scale(1) rotate(0);
+  opacity: 1;
+}
+
+body.light .sun-icon {
+  transform: scale(1) rotate(0);
+  opacity: 1;
+}
+body.light .moon-icon {
+  transform: scale(0) rotate(90deg);
+  opacity: 0;
+}
+
+/* Responsive Scaling for Mobile Screens */
+@media (max-width: 600px) {
+  /* On small screens, instead of expanding horizontally, 
+     we scale the calculator card down slightly, or overlay the drawer.
+     But expanding horizontally works if we scale down! */
+  .app-container {
+    transform-origin: center center;
+    padding: 20px 10px;
+  }
+  
+  .calculator-card.open {
+    /* Limit the open card to display cleanly on narrow screens */
+    width: 340px; 
+    /* Let's stack the scientific panel on top or make it an overlay! */
+  }
+
+  .calculator-card.open .scientific-panel {
+    position: absolute;
+    top: 172px; /* Place below display area */
+    left: 24px;
+    width: 292px; /* Matches main grid width */
+    height: 444px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 10;
+    margin-right: 0;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+  }
+
+  .calculator-card.open .scientific-grid {
+    grid-template-columns: repeat(4, 64px); /* Make it 4 cols on mobile overlay! */
+    grid-template-rows: repeat(5, 64px);
+    width: 100%;
+    padding: 10px;
+  }
+}

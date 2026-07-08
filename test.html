@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parser Test Suite</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      background: #111;
+      color: #eee;
+    }
+    .pass { color: #00ff00; }
+    .fail { color: #ff0000; font-weight: bold; }
+    .summary { margin-bottom: 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Parser Test Suite</h1>
+  <div class="summary" id="summary">Running tests...</div>
+  <ul id="test-list"></ul>
+
+  <script src="parser.js"></script>
+  <script>
+    const tests = [
+      { name: "Basic Precedence (2 + 3 * 4)", expr: "2 + 3 * 4", deg: true, expected: 14 },
+      { name: "Parentheses ((2 + 3) * 4)", expr: "(2 + 3) * 4", deg: true, expected: 20 },
+      { name: "Implicit Multiplication (2π)", expr: "2π", deg: true, expected: 2 * Math.PI },
+      { name: "Implicit Multiplication between parens ((2+3)(4+5))", expr: "(2+3)(4+5)", deg: true, expected: 45 },
+      { name: "Trig function (Degree Mode) (5sin(90))", expr: "5sin(90)", deg: true, expected: 5 },
+      { name: "Trig function (Radian Mode) (sin(π/2))", expr: "sin(π/2)", deg: false, expected: 1 },
+      { name: "Power associativity (2^3^2)", expr: "2^3^2", deg: true, expected: 512 },
+      { name: "Square Root (√(16))", expr: "√16", deg: true, expected: 4 },
+      { name: "Factorial (5!)", expr: "5!", deg: true, expected: 120 },
+      { name: "Percentage (50%)", expr: "50%", deg: true, expected: 0.5 },
+      { name: "Percentage addition (10 + 10%)", expr: "10 + 10%", deg: true, expected: 10.1 },
+      { name: "Scientific Notation (2E3)", expr: "2E3", deg: true, expected: 2000 },
+      { name: "Reciprocal (5^-1)", expr: "5^-1", deg: true, expected: 0.2 },
+      { name: "Tolerant: Incomplete function (sin(30)", expr: "sin(30", deg: true, expected: 0.5 },
+      { name: "Tolerant: Trailing operator (2 +)", expr: "2 +", deg: true, expected: 2 }
+    ];
+
+    let passed = 0;
+    const list = document.getElementById("test-list");
+
+    tests.forEach(t => {
+      const li = document.createElement("li");
+      try {
+        const actual = evaluateExpression(t.expr, t.deg);
+        
+        // Approximate floating point check
+        const diff = Math.abs(actual - t.expected);
+        const isPass = diff < 1e-9;
+        
+        if (isPass) {
+          li.className = "pass";
+          li.textContent = `[PASS] ${t.name} => ${actual}`;
+          passed++;
+        } else {
+          li.className = "fail";
+          li.textContent = `[FAIL] ${t.name} => Expected: ${t.expected}, Got: ${actual}`;
+        }
+      } catch (err) {
+        li.className = "fail";
+        li.textContent = `[FAIL] ${t.name} => Threw error: ${err.message}`;
+      }
+      list.appendChild(li);
+    });
+
+    const summary = document.getElementById("summary");
+    summary.textContent = `Completed: Passed ${passed}/${tests.length} tests.`;
+    console.log(`Test suite completed: Passed ${passed}/${tests.length} tests.`);
+  </script>
+</body>
+</html>

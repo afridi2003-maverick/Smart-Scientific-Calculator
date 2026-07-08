@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Scientific Calculator</title>
+  <!-- Outfit Google Font for clean modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark">
+  <!-- Theme Toggle in top corner -->
+  <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2"></path>
+      <path d="M12 20v2"></path>
+      <path d="M4.93 4.93l1.41 1.41"></path>
+      <path d="M17.66 17.66l1.41 1.41"></path>
+      <path d="M2 12h2"></path>
+      <path d="M20 12h2"></path>
+      <path d="M6.34 17.66l-1.41 1.41"></path>
+      <path d="M19.07 4.93l-1.41 1.41"></path>
+    </svg>
+    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+    </svg>
+  </button>
+
+  <div class="app-container">
+    <!-- Ambient Blue Glow centered behind the calculator card -->
+    <div class="ambient-glow" id="ambient-glow"></div>
+
+    <!-- Main Calculator Card -->
+    <div class="calculator-card" id="calculator-card">
+      
+      <!-- Top Display Area -->
+      <div class="display-area">
+        <div class="mode-badge" id="mode-badge">DEG</div>
+        <div class="expression-line" id="expression-line">0</div>
+        <div class="result-line" id="result-line">=0</div>
+      </div>
+
+      <!-- Button Section container (slides open horizontally) -->
+      <div class="card-body">
+        
+        <!-- Left Panel: Scientific drawer (hidden by default) -->
+        <div class="scientific-panel" id="scientific-panel">
+          <!-- Grid representing the scientific keys -->
+          <div class="scientific-grid">
+            <!-- Row 1 -->
+            <button class="btn scientific-btn deg-rad-btn" data-action="toggle-deg-rad" aria-label="Toggle degrees and radians">
+              <span class="rad-label active">rad</span>
+              <span class="slash">/</span>
+              <span class="deg-label">deg</span>
+            </button>
+            <button class="btn scientific-btn" data-char="(" aria-label="Open parenthesis">(</button>
+            <button class="btn scientific-btn" data-char=")" aria-label="Close parenthesis">)</button>
+
+            <!-- Row 2 -->
+            <button class="btn scientific-btn" data-char="cos" aria-label="Cosine">cos</button>
+            <button class="btn scientific-btn" data-char="tan" aria-label="Tangent">tan</button>
+            <button class="btn scientific-btn" data-action="reciprocal" aria-label="One divided by x">1/x</button>
+
+            <!-- Row 3 -->
+            <button class="btn scientific-btn" data-char="ln" aria-label="Natural logarithm">ln</button>
+            <button class="btn scientific-btn" data-char="log" aria-label="Logarithm base 10">log</button>
+            <button class="btn scientific-btn" data-char="√" aria-label="Square root">√</button>
+
+            <!-- Row 4 -->
+            <button class="btn scientific-btn" data-action="square" aria-label="x squared">x²</button>
+            <button class="btn scientific-btn" data-char="^" aria-label="x to power of y">xʸ</button>
+            <button class="btn scientific-btn" data-char="E" aria-label="Scientific notation exponent">EXP</button>
+
+            <!-- Row 5 -->
+            <button class="btn scientific-btn" data-char="π" aria-label="Pi constant">π</button>
+            <button class="btn scientific-btn" data-char="e" aria-label="Euler constant">e</button>
+            <button class="btn scientific-btn utility-btn" id="sc-ac-btn" data-action="clear" aria-label="All Clear">AC</button>
+
+            <!-- Row 6 -->
+            <button class="btn scientific-btn" data-action="backspace" aria-label="Backspace">⌫</button>
+            <button class="btn scientific-btn" data-char="!" aria-label="Factorial">!</button>
+            <button class="btn scientific-btn" data-action="toggle-sign" aria-label="Toggle positive/negative">±</button>
+          </div>
+        </div>
+
+        <!-- Right Panel: Main Number and Operator Grid -->
+        <div class="button-grid">
+          <!-- Row 1 -->
+          <button class="btn utility-btn" id="sc-toggle-btn" data-action="toggle-sc" aria-label="Toggle scientific panel">SC</button>
+          <button class="btn scientific-btn" data-char="sin" aria-label="Sine">sin</button>
+          <button class="btn scientific-btn inline-deg-rad-btn" data-action="toggle-deg-rad" aria-label="Toggle deg/rad">deg</button>
+          <button class="btn utility-btn" data-char="%" aria-label="Percentage">%</button>
+
+          <!-- Row 2 -->
+          <button class="btn number-btn" data-char="7" aria-label="Seven">7</button>
+          <button class="btn number-btn" data-char="8" aria-label="Eight">8</button>
+          <button class="btn number-btn" data-char="9" aria-label="Nine">9</button>
+          <button class="btn operator-btn" data-char="÷" aria-label="Divide">÷</button>
+
+          <!-- Row 3 -->
+          <button class="btn number-btn" data-char="4" aria-label="Four">4</button>
+          <button class="btn number-btn" data-char="5" aria-label="Five">5</button>
+          <button class="btn number-btn" data-char="6" aria-label="Six">6</button>
+          <button class="btn operator-btn" data-char="×" aria-label="Multiply">×</button>
+
+          <!-- Row 4 -->
+          <button class="btn number-btn" data-char="1" aria-label="One">1</button>
+          <button class="btn number-btn" data-char="2" aria-label="Two">2</button>
+          <button class="btn number-btn" data-char="3" aria-label="Three">3</button>
+          <button class="btn operator-btn" data-char="−" aria-label="Subtract">−</button>
+
+          <!-- Row 5 & 6 (equals button spans both) -->
+          <button class="btn number-btn" data-char="0" aria-label="Zero">0</button>
+          <button class="btn number-btn" data-char="." aria-label="Decimal point">.</button>
+          <button class="btn operator-btn" data-char="+" aria-label="Add">+</button>
+          <button class="btn equals-btn" data-action="calculate" aria-label="Calculate equals">=</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="parser.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
