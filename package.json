@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Premium glassmorphic scientific calculator with dark/light themes and custom parser.",
   "scripts": {
-    "dev": "wrangler pages dev ."
+    "build": "echo 'Static site — no build step required.'",
+    "dev": "npx wrangler pages dev ."
   },
   "keywords": [
     "calculator",
@@ -12,8 +13,5 @@
     "cloudflare-pages"
   ],
   "author": "Mostakim hawlader Afridi",
-  "license": "MIT",
-  "devDependencies": {
-    "wrangler": "^3.63.0"
-  }
+  "license": "MIT"
 }
